@@ -26,29 +26,33 @@
         </section>
 
         <form id="phonesForm">
-            <table class="center overflowAuto" id="phonesTable">
+            <table class="center overflowAuto">
                 <caption>
                     Stolen phones
                 </caption>
-                <tr>
-                    <th>Image</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Operation system</th>
-                    <th>SCreensize</th>
-                </tr>
-                
-                <tr id="tableFormRow">
-                    <td><input required type="text" name="brand" /></td>
-                    <td><input required type="text" name="model" /></td>
-                    <td><input required type="text" name="os" /></td>
-                    <td><input required type="text" name="image" /></td>
-                    <td><input required type="number" name="screensize" /></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Image</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Operation system</th>
+                        <th>Screensize</th>
+                    </tr>
+                </thead>
+                <tbody id="phonesTableBody">
+                    <tr id="tableFormRow">
+                        <td><input value="d" required type="text" name="brand" /></td>
+                        <td><input value="t" required type="text" name="model" /></td>
+                        <td><input value="pm" required type="text" name="os" /></td>
+                        <td><input value="t" required type="text" name="image" /></td>
+                        <td><input value="2" required type="number" name="screensize" /></td>
+                    </tr>
+                </tbody>
             </table>
 
             <button type="submit">Add</button>
         </form>
+        <button onclick="resetData()">Reset</button>
     </body>
     <footer class="footer">
         <p>Created by: Chakir Belhaj & Ahmed Mous</p>
@@ -64,6 +68,23 @@
             createPhone();
         });
     });
+
+    function sortTable() {}
+
+    function resetData() {
+        $.ajax({
+            url: "https://wt.ops.labs.vu.nl/api20/2b9115a4/reset",
+            method: "GET",
+            success: function(result) {
+                $("#phonesTableBody")
+                    .children().not(":first").not(":nth-child(2)").not(":last")
+                    .remove();
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
 
     function createPhone() {
         var data = $("#phonesForm").serializeArray();
@@ -87,7 +108,7 @@
     }
 
     function addPhoneToTable(data) {
-        $("#phonesTable").append(
+        $("#tableFormRow").before(
             "<tr>" +
                 "<td><img class='imageInTable' src=" +
                 data[0].value +
