@@ -25,7 +25,7 @@
             </p>
         </section>
 
-        <form>
+        <form id="phonesForm">
             <table class="center overflowAuto" id="phonesTable">
                 <caption>
                     Stolen phones
@@ -43,13 +43,60 @@
 <script>
     $(document).ready(function() {
         getPhoneData();
+        $("#phonesForm").submit(function(e) {
+            e.preventDefault();
+            createPhone();
+        });
     });
+
+    function createPhone() {
+        var data = $("#phonesForm").serializeArray();
+        $.ajax({
+            url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
+            data: {
+                brand: data[0].value,
+                model: data[1].value,
+                os: data[2].value,
+                image: data[3].value,
+                screensize: data[4].value
+            },
+            method: "POST",
+            success: function(result) {
+                addPhoneToTable(data);
+            },
+            error: function(error) {
+                console.log(error);
+            }
+        });
+    }
+
+    function addPhoneToTable(data) {
+        $("#phonesTable").append(
+            "<tr>" +
+                "<td><img class='imageInTable' src=" +
+                data[0].value +
+                "></td>" +
+                "<td>" +
+                data[1].value +
+                "</td>" +
+                "<td>" +
+                data[2].value +
+                "</td>" +
+                "<td>" +
+                data[3].value +
+                "</td>" +
+                "<td>" +
+                data[4].value +
+                "</td>" +
+                "</tr>"
+        );
+    }
 
     function getPhoneData() {
         $.ajax({
             url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
             context: document.body,
-            method : "GET",
+            method: "GET",
             success: function(result) {
                 populateTable(result);
             }
@@ -62,25 +109,36 @@
         $.each(phonesData, function(idx, phone) {
             table.append(
                 "<tr>" +
-                    "<td><img class='imageInTable' src="+ phone.image +"></td>"+
-                    "<td>" + phone.brand + "</td>"+
-                    "<td>" + phone.model + "</td>"+
-                    "<td>" + phone.os + "</td>"+
-                    "<td>" + phone.screensize + "</td>"+
-                "</tr>");
+                    "<td><img class='imageInTable' src=" +
+                    phone.image +
+                    "></td>" +
+                    "<td>" +
+                    phone.brand +
+                    "</td>" +
+                    "<td>" +
+                    phone.model +
+                    "</td>" +
+                    "<td>" +
+                    phone.os +
+                    "</td>" +
+                    "<td>" +
+                    phone.screensize +
+                    "</td>" +
+                    "</tr>"
+            );
         });
         addFormRowToTable(table);
     }
 
-    function addFormRowToTable(table){
+    function addFormRowToTable(table) {
         table.append(
-                "<tr>"+
-                    "<td><input required type='text' name='brand' /></td>"+
-                    "<td><input required type='text' name='model' /></td>"+
-                    "<td><input required type='text' name='os' /></td>"+
-                    "<td><input required type='text' name='image' /></td>"+
-                    "<td><input required type='number' name='screensize' /></td>"+
+            "<tr>" +
+                "<td><input value='s' required type='text' name='brand' /></td>" +
+                "<td><input value='s' required type='text' name='model' /></td>" +
+                "<td><input value='s' required type='text' name='os' /></td>" +
+                "<td><input value='s' required type='text' name='image' /></td>" +
+                "<td><input value='2' required type='number' name='screensize' /></td>" +
                 "</tr>"
-            )
+        );
     }
 </script>
