@@ -4,7 +4,9 @@
     <head>
         <title>Illegal phoneshop America</title>
         <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
     </head>
 
     <body style="background-image: url('https://wallpaperaccess.com/full/1611219.jpg');">
@@ -26,7 +28,7 @@
         </section>
 
         <form id="phonesForm">
-            <table class="center overflowAuto">
+            <table class="center overflowAuto" id="tst">
                 <caption>
                     Stolen phones
                 </caption>
@@ -67,6 +69,9 @@
             e.preventDefault();
             createPhone();
         });
+        $(document).ready(function() {
+            $("#tst").DataTable();
+        });
     });
 
     function sortTable() {}
@@ -77,7 +82,10 @@
             method: "GET",
             success: function(result) {
                 $("#phonesTableBody")
-                    .children().not(":first").not(":nth-child(2)").not(":last")
+                    .children()
+                    .not(":first")
+                    .not(":nth-child(2)")
+                    .not(":last")
                     .remove();
             },
             error: function(error) {
