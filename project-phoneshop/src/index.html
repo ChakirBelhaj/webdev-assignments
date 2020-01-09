@@ -30,7 +30,23 @@
                 <caption>
                     Stolen phones
                 </caption>
+                <tr>
+                    <th>Image</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Operation system</th>
+                    <th>SCreensize</th>
+                </tr>
+                
+                <tr id="tableFormRow">
+                    <td><input required type="text" name="brand" /></td>
+                    <td><input required type="text" name="model" /></td>
+                    <td><input required type="text" name="os" /></td>
+                    <td><input required type="text" name="image" /></td>
+                    <td><input required type="number" name="screensize" /></td>
+                </tr>
             </table>
+
             <button type="submit">Add</button>
         </form>
     </body>
@@ -98,16 +114,15 @@
             context: document.body,
             method: "GET",
             success: function(result) {
+                console.log(result);
                 populateTable(result);
             }
         });
     }
 
     function populateTable(phonesData) {
-        console.log(phonesData);
-        var table = $("#phonesTable");
         $.each(phonesData, function(idx, phone) {
-            table.append(
+            $("#tableFormRow").before(
                 "<tr>" +
                     "<td><img class='imageInTable' src=" +
                     phone.image +
@@ -127,18 +142,5 @@
                     "</tr>"
             );
         });
-        addFormRowToTable(table);
-    }
-
-    function addFormRowToTable(table) {
-        table.append(
-            "<tr>" +
-                "<td><input value='s' required type='text' name='brand' /></td>" +
-                "<td><input value='s' required type='text' name='model' /></td>" +
-                "<td><input value='s' required type='text' name='os' /></td>" +
-                "<td><input value='s' required type='text' name='image' /></td>" +
-                "<td><input value='2' required type='number' name='screensize' /></td>" +
-                "</tr>"
-        );
     }
 </script>
