@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <head>
-        <title>Page Title</title>
+        <title>Illegal phoneshop America</title>
         <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-        <title>Illegal shop</title>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     </head>
+
     <body style="background-image: url('https://wallpaperaccess.com/full/1611219.jpg');">
         <nav>
             <ul class="navBar">
@@ -14,7 +15,7 @@
                 <li><a href="about.html">About</a></li>
             </ul>
         </nav>
-        
+
         <section>
             <h1><abbr title="World Health Organization">Illegal</abbr> phoneshop America</h1>
             <h2>Keep it quiet</h2>
@@ -24,45 +25,62 @@
             </p>
         </section>
 
-        <form class="overflowAuto">
-            <table class="center overflowAuto">
-                <caption>Stolen phones</caption>
-                <tr>
-                    <th>Image</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Operation system</th>
-                    <th>SCreensize</th>
-                </tr>
-                <tr>                    
-                    <td><img class="imageInTable" src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png" alt="Girl in a jacket"></td>
-                    <td>Iphone x</td>
-                    <td>s</td>
-                    <td>50</td>
-                    <td>50</td>
-                </tr>
-                <tr>
-                    <td>Eve</td>
-                    <td>Jackson</td>
-                    <td>Jackson</td>
-                    <td>Jackson</td>
-                    <td>94</td>
-                </tr>
-                <tr>
-                    <td><input required type="text" name="brand"></td>
-                    <td><input required type="text" name="model"></td>
-                    <td><input required type="text" name="os"></td>
-                    <td><input required type="text" name="image"></td>
-                    <td><input required type="number" name="screensize"></td>
-                </tr>
+        <form>
+            <table class="center overflowAuto" id="phonesTable">
+                <caption>
+                    Stolen phones
+                </caption>
             </table>
             <button type="submit">Add</button>
         </form>
     </body>
     <footer class="footer">
-                <p>Created by: Chakir Belhaj & Ahmed Mous</p>
-                <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com">
-                    chakir.belhaj@outlook.com</a>.</p>
-
-      </footer>
+        <p>Created by: Chakir Belhaj & Ahmed Mous</p>
+        <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com"> chakir.belhaj@outlook.com</a>.</p>
+    </footer>
 </html>
+
+<script>
+    $(document).ready(function() {
+        getPhoneData();
+    });
+
+    function getPhoneData() {
+        $.ajax({
+            url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
+            context: document.body,
+            method : "GET",
+            success: function(result) {
+                populateTable(result);
+            }
+        });
+    }
+
+    function populateTable(phonesData) {
+        console.log(phonesData);
+        var table = $("#phonesTable");
+        $.each(phonesData, function(idx, phone) {
+            table.append(
+                "<tr>" +
+                    "<td><img class='imageInTable' src="+ phone.image +"></td>"+
+                    "<td>" + phone.brand + "</td>"+
+                    "<td>" + phone.model + "</td>"+
+                    "<td>" + phone.os + "</td>"+
+                    "<td>" + phone.screensize + "</td>"+
+                "</tr>");
+        });
+        addFormRowToTable(table);
+    }
+
+    function addFormRowToTable(table){
+        table.append(
+                "<tr>"+
+                    "<td><input required type='text' name='brand' /></td>"+
+                    "<td><input required type='text' name='model' /></td>"+
+                    "<td><input required type='text' name='os' /></td>"+
+                    "<td><input required type='text' name='image' /></td>"+
+                    "<td><input required type='number' name='screensize' /></td>"+
+                "</tr>"
+            )
+    }
+</script>
