@@ -70,3 +70,10 @@ body {
     color: white;
     text-align: center;
 }
+
+
+@media print {
+    .hidden-print {
+      display: none !important;
+    }
+  }

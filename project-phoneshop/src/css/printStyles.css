@@ -1,0 +1,16 @@
+.box {
+    display: none;
+  }
+
+table,
+th,
+td {
+    border: 1px solid white;
+}
+
+
+@media print {
+    .hidden-print {
+      display: none !important;
+    }
+  }
