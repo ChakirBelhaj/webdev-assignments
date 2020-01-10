@@ -1,16 +1,11 @@
-.box {
-    display: none;
-  }
 
-table,
-th,
-td {
-    border: 1px solid white;
-}
-
-
-@media print {
+/* @media print { */
     .hidden-print {
-      display: none !important;
+        display: none !important;
     }
-  }
+      /* } */
+      .imageInTable {
+        text-align: center;
+        width: 100px;
+        height: 100px;
+    }

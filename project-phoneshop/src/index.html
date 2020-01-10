@@ -2,16 +2,15 @@
 <html>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <head>
-        <title>Page Title</title>
-        <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-        <link rel="stylesheet" media="print" href="printStyles.css">
-        <!-- <link rel="stylesheet" media="text/css" href="./css/printStyles.css"> -->
-
         <title>Illegal shop</title>
+        <link rel="stylesheet" type="text/css" href="./css/styles.css" />
+        <link rel="stylesheet" media="print" href="./css/printStyles.css">
+        <!-- <link rel="stylesheet" type="text/css" href="./css/print.css"> -->
+        <!-- <link rel="stylesheet" media="text/css" href="./css/printStyles.css"> -->
     </head>
     <body style="background-image: url('https://wallpaperaccess.com/full/1611219.jpg');">
-        <nav>
-            <ul class="navBar hidden-print">
+        <nav class="hidden-print">
+            <ul class="navBar">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="contact.html">Contact</a></li>
                 <li><a href="about.html">About</a></li>
@@ -51,7 +50,7 @@
                     <td>Jackson</td>
                     <td>94</td>
                 </tr>
-                <tr>
+                <tr class="hidden-print">
                     <td><input required type="text" name="brand"></td>
                     <td><input required type="text" name="model"></td>
                     <td><input required type="text" name="os"></td>
@@ -59,10 +58,10 @@
                     <td><input required type="number" name="screensize"></td>
                 </tr>
             </table>
-            <button type="submit">Add</button>
+            <button class="hidden-print" type="submit">Add</button>
         </form>
     </body>
-    <footer class="footer">
+    <footer class="footer hidden-print">
                 <p>Created by: Chakir Belhaj & Ahmed Mous</p>
                 <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com">
                     chakir.belhaj@outlook.com</a>.</p>
