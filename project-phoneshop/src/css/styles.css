@@ -92,12 +92,7 @@ body {
     color: white;
 }
 
-.background-image {
-    opacity: 0.3;
-    filter: alpha(opacity=30);
-}
-
-.tone {
+.tableheader {
     font-size:20px;
 }
 
