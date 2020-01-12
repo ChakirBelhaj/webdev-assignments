@@ -28,20 +28,27 @@
         </section>
 
         <form id="phonesForm">
-            <table class="center overflowAuto" id="tst">
+            <table id="example">
                 <caption>
                     Stolen phones
                 </caption>
                 <thead>
                     <tr>
-                        <th>Image</th>
-                        <th>Brand</th>
-                        <th>Model</th>
-                        <th>Operation system</th>
-                        <th>Screensize</th>
+                        <th id="test" name="test">Image</th>
+                        <th id="2">Brand</th>
+                        <th id="3">Model</th>
+                        <th id="4">Operation system</th>
+                        <th id="5">Screensize</th>
                     </tr>
                 </thead>
                 <tbody id="phonesTableBody">
+                    <tr>
+                        <td>dd</td>
+                        <td>dd</td>
+                        <td>dd</td>
+                        <td>dd</td>
+                        <td>dd</td>
+                    </tr>
                     <tr id="tableFormRow">
                         <td><input value="d" required type="text" name="brand" /></td>
                         <td><input value="t" required type="text" name="model" /></td>
@@ -64,17 +71,18 @@
 
 <script>
     $(document).ready(function() {
-        getPhoneData();
         $("#phonesForm").submit(function(e) {
             e.preventDefault();
             createPhone();
         });
         $(document).ready(function() {
-            $("#tst").DataTable();
+            $("#example").DataTable({
+                responsive: true,
+                columns: [{ data: "brand" }, { data: "model" }, { data: "os" }, { data: "image" }, { data: "screensize" }]
+            });
+            getPhoneData();
         });
     });
-
-    function sortTable() {}
 
     function resetData() {
         $.ajax({
@@ -92,6 +100,38 @@
                 console.log(error);
             }
         });
+    }
+
+    function getPhoneData() {
+        $.ajax({
+            url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
+            context: document.body,
+            method: "GET",
+            success: function(result) {
+                console.log(result);
+                populateTable(result);
+            }
+        });
+    }
+
+    function populateTable(phonesData) {
+        $.each(phonesData, function(idx, phone) {
+            addPhoneToTable(phone);
+        });
+    }
+
+    function addPhoneToTable(data) {
+        console.log(data);
+        var table = $("#example").DataTable();
+        table.row
+            .add({
+                brand: data.brand,
+                model: data.model,
+                os: data.os,
+                image: data.image,
+                screensize: data.screensize
+            })
+            .draw();
     }
 
     function createPhone() {
@@ -112,64 +152,6 @@
             error: function(error) {
                 console.log(error);
             }
-        });
-    }
-
-    function addPhoneToTable(data) {
-        $("#tableFormRow").before(
-            "<tr>" +
-                "<td><img class='imageInTable' src=" +
-                data[0].value +
-                "></td>" +
-                "<td>" +
-                data[1].value +
-                "</td>" +
-                "<td>" +
-                data[2].value +
-                "</td>" +
-                "<td>" +
-                data[3].value +
-                "</td>" +
-                "<td>" +
-                data[4].value +
-                "</td>" +
-                "</tr>"
-        );
-    }
-
-    function getPhoneData() {
-        $.ajax({
-            url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
-            context: document.body,
-            method: "GET",
-            success: function(result) {
-                console.log(result);
-                populateTable(result);
-            }
-        });
-    }
-
-    function populateTable(phonesData) {
-        $.each(phonesData, function(idx, phone) {
-            $("#tableFormRow").before(
-                "<tr>" +
-                    "<td><img class='imageInTable' src=" +
-                    phone.image +
-                    "></td>" +
-                    "<td>" +
-                    phone.brand +
-                    "</td>" +
-                    "<td>" +
-                    phone.model +
-                    "</td>" +
-                    "<td>" +
-                    phone.os +
-                    "</td>" +
-                    "<td>" +
-                    phone.screensize +
-                    "</td>" +
-                    "</tr>"
-            );
         });
     }
 </script>
