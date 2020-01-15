@@ -20,20 +20,20 @@
             </ul>
         </nav>
         <section>
-            <h1 class="title"><abbr title="World Health Organization">Illegal</abbr> phoneshop America</h1>
-            <h2>Keep it quiet</h2>
-            <p class="fontSize20 center">
+            <h1 class="title textWhite"><abbr title="World Health Organization">Illegal</abbr> phoneshop America</h1>
+            <h2 class="textWhite">Keep it quiet</h2>
+            <p class="fontSize20 center textWhite">
                 We are a World Wide criminal organization for illegal phone selling.
             </p>
         </section>
 
         <form id="overflowAuto" class="overflowAuto">
             <table id="example" class="overflowAuto">
-                <caption>
+                <caption class="textWhite">
                     Stolen phones
                 </caption>
                 <thead>
-                    <tr class="tableheader">
+                    <tr class="tableheader textWhite">
                         <th id="test" name="test">Image</th>
                         <th id="2">Brand</th>
                         <th id="3">Model</th>
@@ -43,11 +43,11 @@
                 </thead>
                 <tbody id="phonesTableBody">
                     <tr id="tableFormRow" class="hidden-print">
-                        <td><input value="d"  required type="text" name="brand" /></td>
-                        <td><input value="t"  required type="text" name="model" /></td>
+                        <td><input value="d" required type="text" name="brand" /></td>
+                        <td><input value="t" required type="text" name="model" /></td>
                         <td><input value="pm" required type="text" name="os" /></td>
-                        <td><input value="t"  required type="text" name="image" /></td>
-                        <td><input value="2"  required type="number" name="screensize" /></td>
+                        <td><input value="t" required type="text" name="image" /></td>
+                        <td><input value="2" required type="number" name="screensize"/></td>
                     </tr>
                 </tbody>
             </table>
@@ -104,7 +104,18 @@
         $(document).ready(function() {
             $("#example").DataTable({
                 responsive: true,
-                columns: [{ data: "brand" }, { data: "model" }, { data: "os" }, { data: "image" }, { data: "screensize" }]
+                columns: [{ data: "image" }, { data: "brand" }, { data: "model" }, { data: "os" }, { data: "screensize" }],
+                columnDefs: [
+                    {
+                        targets: 0,
+                        render: function(data) {
+                            if(data == '<input value="d" required="" type="text" name="brand">'){
+                                return data;
+                            }
+                            return '<img class="imageInTable" src="' + data + '">';
+                        }
+                    }
+                ]
             });
             getPhoneData();
         });
@@ -134,7 +145,6 @@
             context: document.body,
             method: "GET",
             success: function(result) {
-                console.log(result);
                 populateTable(result);
             }
         });
@@ -147,14 +157,13 @@
     }
 
     function addPhoneToTable(data) {
-        console.log(data);
         var table = $("#example").DataTable();
         table.row
             .add({
+                image: data.image,
                 brand: data.brand,
                 model: data.model,
                 os: data.os,
-                image: data.image,
                 screensize: data.screensize
             })
             .draw();
