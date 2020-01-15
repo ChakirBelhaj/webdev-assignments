@@ -3,18 +3,46 @@ th,
 td {
     border: 1px solid black;
     border-collapse: collapse;
-    
-}
-table{
-    overflow-x:auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 h1 {
     page-break-before: always;
 }
 
+h2 {
+    text-align: center;
+    font-size: 30px;
+}
+
+.title  {
+    text-align: center;
+    font-size: 50px;
+}
+
 ul.a {
     list-style-type: circle;
+}
+
+.positiveButton {
+    background-color: darkgreen; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+.positiveButton:hover {
+    background-color: #4CAF50; /* Green */
+    color: white;
+}
+.fontSize20 {
+    font-size: 20px
 }
 
 .navBar {
@@ -23,10 +51,6 @@ ul.a {
     padding: 0;
     overflow: hidden;
     background-color: #333;
-}
-
-p {
-    font-size: 15px;
 }
 
 .overflowAuto{
@@ -53,12 +77,19 @@ p {
 .imageInTable {
     text-align: center;
     width: 64px;
-    height: 64px;
+    height: 120px;
 }
 
 body {
     background-repeat: no-repeat;
-    background-size: auto auto;
+    background-size: auto;
+    background-size: cover;
+    background-image: url('../images/backgroundimage.jpg');
+    color: white;
+}
+
+.tableheader {
+    font-size:20px;
 }
 
 .footer {
@@ -70,3 +101,9 @@ body {
     color: white;
     text-align: center;
 }
+
+@media print {
+    .hidden-print {
+      display: none !important;
+    }
+  }
