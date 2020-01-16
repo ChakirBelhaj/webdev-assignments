@@ -45,6 +45,23 @@ ul.a {
     background-color: #4CAF50; /* Green */
     color: white;
 }
+
+.negativeButton {
+    background-color: darkred; /* Green */
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+.negativeButton:hover {
+    background-color: red; /* Green */
+    color: white;
+}
 .fontSize20 {
     font-size: 20px
 }

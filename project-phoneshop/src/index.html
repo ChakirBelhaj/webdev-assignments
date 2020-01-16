@@ -27,8 +27,8 @@
             </p>
         </section>
 
-        <form id="overflowAuto" class="overflowAuto">
-            <table id="example" class="overflowAuto">
+        <form id="phonesForm" class="overflowAuto">
+            <table id="phonesTable" class="overflowAuto">
                 <caption class="textWhite">
                     Stolen phones
                 </caption>
@@ -43,17 +43,18 @@
                 </thead>
                 <tbody id="phonesTableBody">
                     <tr id="tableFormRow" class="hidden-print">
+                        <td><input value="t" required type="text" name="image" /></td>
                         <td><input value="d" required type="text" name="brand" /></td>
                         <td><input value="t" required type="text" name="model" /></td>
                         <td><input value="pm" required type="text" name="os" /></td>
-                        <td><input value="t" required type="text" name="image" /></td>
-                        <td><input value="2" required type="number" name="screensize"/></td>
+                        <td><input value="2" required type="number" name="screensize" /></td>
                     </tr>
                 </tbody>
             </table>
             <button class="positiveButton hidden-print" type="submit">Add</button>
         </form>
-        <button onclick="resetData()">Reset</button>
+        <br>
+        <button class="negativeButton hidden-print" onclick="resetData()">Reset</button>
 
         <table class="hidden-print">
             <caption class="fontSize20 hidden-print">
@@ -99,17 +100,19 @@
     $(document).ready(function() {
         $("#phonesForm").submit(function(e) {
             e.preventDefault();
+            console.log("hots")
             createPhone();
         });
+
         $(document).ready(function() {
-            $("#example").DataTable({
+            $("#phonesTable").DataTable({
                 responsive: true,
                 columns: [{ data: "image" }, { data: "brand" }, { data: "model" }, { data: "os" }, { data: "screensize" }],
                 columnDefs: [
                     {
                         targets: 0,
                         render: function(data) {
-                            if(data == '<input value="d" required="" type="text" name="brand">'){
+                            if (data == '<input value="t" required="" type="text" name="image">') {
                                 return data;
                             }
                             return '<img class="imageInTable" src="' + data + '">';
@@ -132,6 +135,7 @@
                     .not(":nth-child(2)")
                     .not(":last")
                     .remove();
+                    alert("successfully resetted")
             },
             error: function(error) {
                 console.log(error);
@@ -157,7 +161,7 @@
     }
 
     function addPhoneToTable(data) {
-        var table = $("#example").DataTable();
+        var table = $("#phonesTable").DataTable();
         table.row
             .add({
                 image: data.image,
@@ -171,21 +175,31 @@
 
     function createPhone() {
         var data = $("#phonesForm").serializeArray();
+
         $.ajax({
             url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
             data: {
-                brand: data[0].value,
-                model: data[1].value,
-                os: data[2].value,
-                image: data[3].value,
-                screensize: data[4].value
+                image: data[1].value,
+                brand: data[2].value,
+                model: data[3].value,
+                os: data[4].value,
+                screensize: data[5].value
             },
             method: "POST",
             success: function(result) {
+                data = {
+                    image: data[1].value,
+                    brand: data[2].value,
+                    model: data[3].value,
+                    os: data[4].value,
+                    screensize: data[5].value
+                };
                 addPhoneToTable(data);
+                alert(data.brand + " successfully added")
+
             },
             error: function(error) {
-                console.log(error);
+                alert(error.responseText);
             }
         });
     }
