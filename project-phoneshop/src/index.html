@@ -41,7 +41,8 @@
                         <th id="5">Screensize</th>
                     </tr>
                 </thead>
-                <tbody id="phonesTableBody">
+                <tbody id="phonesTableBody"></tbody>
+                <tfoot>
                     <tr id="tableFormRow" class="hidden-print">
                         <td><input value="t" required type="text" name="image" /></td>
                         <td><input value="d" required type="text" name="brand" /></td>
@@ -49,11 +50,11 @@
                         <td><input value="pm" required type="text" name="os" /></td>
                         <td><input value="2" required type="number" name="screensize" /></td>
                     </tr>
-                </tbody>
+                </tfoot>
             </table>
             <button class="positiveButton hidden-print" type="submit">Add</button>
         </form>
-        <br>
+        <br />
         <button class="negativeButton hidden-print" onclick="resetData()">Reset</button>
 
         <table class="hidden-print">
@@ -100,7 +101,6 @@
     $(document).ready(function() {
         $("#phonesForm").submit(function(e) {
             e.preventDefault();
-            console.log("hots")
             createPhone();
         });
 
@@ -118,7 +118,8 @@
                             return '<img class="imageInTable" src="' + data + '">';
                         }
                     }
-                ]
+                ],
+                lengthMenu: [5, 10, 20]
             });
             getPhoneData();
         });
@@ -129,13 +130,9 @@
             url: "https://wt.ops.labs.vu.nl/api20/2b9115a4/reset",
             method: "GET",
             success: function(result) {
-                $("#phonesTableBody")
-                    .children()
-                    .not(":first")
-                    .not(":nth-child(2)")
-                    .not(":last")
-                    .remove();
-                    alert("successfully resetted")
+                $("#phonesTable").DataTable().clear().draw();
+                getPhoneData();
+                alert("successfully resetted");
             },
             error: function(error) {
                 console.log(error);
@@ -195,8 +192,7 @@
                     screensize: data[5].value
                 };
                 addPhoneToTable(data);
-                alert(data.brand + " successfully added")
-
+                alert(data.brand + " successfully added");
             },
             error: function(error) {
                 alert(error.responseText);
