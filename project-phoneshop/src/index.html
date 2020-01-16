@@ -55,7 +55,7 @@
             <button class="positiveButton hidden-print" type="submit">Add</button>
         </form>
         <br />
-        <button class="negativeButton hidden-print" onclick="resetData()">Reset</button>
+        <button class="negativeButton hidden-print" onclick="resetTableData()">Reset</button>
 
         <table class="hidden-print">
             <caption class="fontSize20 hidden-print">
@@ -97,4 +97,17 @@
     </body>
 </html>
 
+<script>
+    // vragen of dit hier mag aan peter
+$(document).ready(function() {
+    formOnSubmit();
+    dataTablePluginConfiguration();
+    getPhoneDataFromApi();
+});
+</script>
+
+<!-- configuration for our datatables plugin, more info : https://datatables.net/-->
+<script src="js/dataTableConfiguration.js"></script>
+
+<!-- controller for sending and receiving data from our api-->
 <script src="./js/phonesController.js"></script>
