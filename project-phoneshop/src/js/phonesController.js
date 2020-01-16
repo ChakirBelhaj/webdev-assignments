@@ -31,7 +31,7 @@ function createPhone() {
     });
 }
 
-//calls an ajax get request to reset the data in
+//calls an ajax get request to reset the data in the table
 function resetTableData() {
     $.ajax({
         url: "https://wt.ops.labs.vu.nl/api20/2b9115a4/reset",
@@ -47,7 +47,7 @@ function resetTableData() {
     });
 }
 
-// grabs the data that is stored in our api through an ajax request
+// grabs the data that is stored in our api through an ajax request and calls the populatetable function
 function getPhoneDataFromApi() {
     $.ajax({
         url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
