@@ -1,0 +1,14 @@
+{
+    "name": "sss",
+    "version": "0.0.0",
+    "description": "<Description about your application>",
+    "main": "server.js",
+    "dependencies": {
+        "body-parser": "^1.15.2",
+        "express": "^4.17.1",
+        "node": "^13.6.0"
+    },
+    "scripts": {
+        "start": "node server.js"
+    }
+}
