@@ -3,19 +3,20 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var swaggerJSDoc = require("swagger-jsdoc");
 var app = express();
+const sqlite3 = require("sqlite3").verbose();
 
 const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: "Customer API",
-      description: "Customer API Information",
-      contact: {
-        name: "Amazing Developer"
-      },
-      servers: ["http://localhost:5000"]
-    }
-  },
-  apis: ["server.js"]
+    swaggerDefinition: {
+        info: {
+            title: "Customer API",
+            description: "Customer API Information",
+            contact: {
+                name: "Amazing Developer"
+            },
+            servers: ["http://localhost:5000"]
+        }
+    },
+    apis: ["server.js"]
 };
 
 // initialize swagger-jsdoc
@@ -24,60 +25,47 @@ const swaggerUi = require("swagger-ui-express");
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 // serve swagger
-app.get("/swagger.json", function(req, res) {
-    res.setHeader("Content-Type", "application/json");
-    res.send(swaggerSpec);
+app.get("/swagger.json", function(req, response) {
+    response.setHeader("Content-Type", "application/json");
+    response.send(swaggerSpec);
 });
 
-// Body Parser Middleware
-// app.use(bodyParser.json());
+let database = new sqlite3.Database(":memory:", err => {
+    if (err) {
+        return console.error(err.message);
+    }
+    console.log("Connected to the phones SQlite database.");
+});
 
-// //CORS Middleware
-// app.use(function(req, res, next) {
-//     //Enabling CORS
-//     res.header("Access-Control-Allow-Origin", "*");
-//     res.header("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
-//     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, contentType,Content-Type, Accept, Authorization");
-//     next();
-// });
+database.serialize(function() {
+    database.run("CREATE TABLE phones (image TEXT, brand TEXT, model TEXT, operation_system TEXT, screensize INTEGER)");
+    image1 = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png"
+    image2 = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Samsung_Galaxy_S8_and_S8_Plus.png/569px-Samsung_Galaxy_S8_and_S8_Plus.png"
+
+    // seed data into the database
+    database.run(`INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`, [image1 , "Iphone", "iPhone X", "Ios", 5]);
+    database.run(`INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`, [image2, "Samsung" ,"Galaxy s8", "Android", 9]);
+});
+
+// parse application/x-www-form-urlencoded
+app.use(bodyParser.urlencoded({ extended: false }));
+// parse application/json
+app.use(bodyParser.json());
+
+// // //CORS Middleware
+app.use(function(req, response, next) {
+    //Enabling CORS
+    response.header("Access-Control-Allow-Origin", "*");
+    response.header("Access-Control-Allow-Methods", "*");
+    response.header("Access-Control-Allow-Headers", "*");
+    next();
+});
 
 //Setting up server
 var server = app.listen(process.env.PORT || 8080, function() {
     var port = server.address().port;
     console.log("App now running on port", port);
 });
-
-//Initiallising connection string
-var dbConfig = {
-    phones: "<dbphonesName>",
-    password: "<dbPassword>",
-    server: "<dbHost_URL>",
-    database: " <dbName>"
-};
-
-//Function to connect to database and execute query
-// var  executeQuery = function(res, query){
-//      sql.connect(dbConfig, function (err) {
-//          if (err) {
-//                      console.log("Error while connecting database :- " + err);
-//                      res.send(err);
-//                   }
-//                   else {
-//                          // create Request object
-//                          var request = new sql.Request();
-//                          // query to the database
-//                          request.query(query, function (err, res) {
-//                            if (err) {
-//                                       console.log("Error while querying database :- " + err);
-//                                       res.send(err);
-//                                      }
-//                                      else {
-//                                        res.send(res);
-//                                             }
-//                                });
-//                        }
-//       });
-// }
 
 // Routes
 /**
@@ -93,13 +81,10 @@ var dbConfig = {
  *       200:
  *         description: An array of phones
  */
-app.get("/api/phones", function(req, res) {
-    console.log("dddd");
-    // var query = "select * from [phones]";
-    // executeQuery (res, query);
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.write("random numbers that should come in the form of json");
-    res.end();
+app.get("/api/phones", function(req, response) {
+    database.all("SELECT * FROM phones", function(err, rows) {
+        response.json(rows);
+    });
 });
 
 /**
@@ -123,13 +108,11 @@ app.get("/api/phones", function(req, res) {
  *         schema:
  *           $ref: '#/definitions/phone'
  */
-app.get("/api/singlePhone", function(req, res) {
-  console.log("dddd");
-  // var query = "select * from [phones]";
-  // executeQuery (res, query);
-  res.writeHead(200, { "Content-Type": "text/html" });
-  res.write("random numbers that should come in the form of json");
-  res.end();
+app.get("/api/singlePhone", function(req, response) {
+    console.log("dddd");
+    response.writeHead(200, { "Content-Type": "text/html" });
+    response.write("random numbers that should come in the form of json");
+    response.end();
 });
 
 //POST API
@@ -153,9 +136,19 @@ app.get("/api/singlePhone", function(req, res) {
  *       200:
  *         description: Successfully created
  */
-app.post("/api/phones", function(req, res) {
-    var query = "INSERT INTO [phones] (Name,Email,Password) VALUES (req.body.Name,req.body.Email,req.body.Password";
-    executeQuery(res, query);
+app.post("/api/phones", function(req, response) {
+    data = req.body;
+    database.run(
+        `INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`,
+        [data.image, data.brand, data.model, data.operation_system, data.screensize],
+        function(err) {
+            if (err) {
+                return console.log(err.message);
+            } else {
+                response.sendStatus(200);
+            }
+        }
+    );
 });
 
 //PUT API
@@ -178,9 +171,9 @@ app.post("/api/phones", function(req, res) {
  *       200:
  *         description: Successfully updated
  */
-app.put("/api/phones/:id", function(req, res) {
+app.put("/api/phones/:id", function(req, response) {
     var query = "UPDATE [phones] SET Name= " + req.body.Name + " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
-    executeQuery(res, query);
+    executeQuery(response, query);
 });
 
 // DELETE API
@@ -203,7 +196,7 @@ app.put("/api/phones/:id", function(req, res) {
  *       200:
  *         description: Successfully deleted
  */
-app.delete("/api/phones /:id", function(req, res) {
+app.delete("/api/phones /:id", function(req, response) {
     var query = "DELETE FROM [phones] WHERE Id=" + req.params.id;
-    executeQuery(res, query);
+    executeQuery(response, query);
 });

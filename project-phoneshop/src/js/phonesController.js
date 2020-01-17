@@ -25,7 +25,7 @@ function createPhone() {
     };
 
     $.ajax({
-        url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
+        url: "http://localhost:8080/api/phones",
         data: data,
         method: "POST",
         success: function(result) {
