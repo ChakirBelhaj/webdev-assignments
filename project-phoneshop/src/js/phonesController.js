@@ -1,3 +1,10 @@
+//After html is loaded
+$(document).ready(function() {
+    formOnSubmit();
+    dataTablePluginConfiguration();
+    getPhoneDataFromApi();
+});
+
 //this function is triggered onsubmit
 function formOnSubmit(){
     $("#phonesForm").submit(function(e) {

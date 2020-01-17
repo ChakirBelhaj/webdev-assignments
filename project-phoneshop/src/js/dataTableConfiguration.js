@@ -1,3 +1,4 @@
+//configuration for the datatable plugin
 function dataTablePluginConfiguration(){
     $("#phonesTable").DataTable({
         responsive: true,
