@@ -38,13 +38,13 @@ let database = new sqlite3.Database(":memory:", err => {
 });
 
 database.serialize(function() {
-    database.run("CREATE TABLE phones (image TEXT, brand TEXT, model TEXT, operation_system TEXT, screensize INTEGER)");
+    database.run("CREATE TABLE phones (image TEXT, brand TEXT, model TEXT, os TEXT, screensize INTEGER)");
     image1 = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png"
     image2 = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Samsung_Galaxy_S8_and_S8_Plus.png/569px-Samsung_Galaxy_S8_and_S8_Plus.png"
 
     // seed data into the database
-    database.run(`INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`, [image1 , "Iphone", "iPhone X", "Ios", 5]);
-    database.run(`INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`, [image2, "Samsung" ,"Galaxy s8", "Android", 9]);
+    database.run(`INSERT INTO phones(image, brand, model, os, screensize ) VALUES(?,?,?,?,?)`, [image1 , "Iphone", "iPhone X", "Ios", 5]);
+    database.run(`INSERT INTO phones(image, brand, model, os, screensize ) VALUES(?,?,?,?,?)`, [image2, "Samsung" ,"Galaxy s8", "Android", 9]);
 });
 
 // parse application/x-www-form-urlencoded
@@ -139,8 +139,8 @@ app.get("/api/singlePhone", function(req, response) {
 app.post("/api/phones", function(req, response) {
     data = req.body;
     database.run(
-        `INSERT INTO phones(image, brand, model, operation_system, screensize ) VALUES(?,?,?,?,?)`,
-        [data.image, data.brand, data.model, data.operation_system, data.screensize],
+        `INSERT INTO phones(image, brand, model, os, screensize ) VALUES(?,?,?,?,?)`,
+        [data.image, data.brand, data.model, data.os, data.screensize],
         function(err) {
             if (err) {
                 return console.log(err.message);
@@ -172,8 +172,24 @@ app.post("/api/phones", function(req, response) {
  *         description: Successfully updated
  */
 app.put("/api/phones/:id", function(req, response) {
-    var query = "UPDATE [phones] SET Name= " + req.body.Name + " , Email=  " + req.body.Email + "  WHERE Id= " + req.params.id;
-    executeQuery(response, query);
+    var query = "UPDATE [phones] SET" + 
+    "  image=" + req.body.image + 
+    ", brand=" + req.body.brand + 
+    ", model=" + req.body.model + 
+    ", os=" + req.body.os + 
+    ", screensize=" + req.body.screensize + 
+    "  WHERE Id=" + req.params.id;
+
+    database.run(
+      query,
+      function(err) {
+          if (err) {
+              return console.log(err.message);
+          } else {
+              response.sendStatus(200);
+          }
+      }
+  );
 });
 
 // DELETE API

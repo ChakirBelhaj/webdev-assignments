@@ -57,7 +57,7 @@ function resetTableData() {
 // grabs the data that is stored in our api through an ajax request and calls the populatetable function
 function getPhoneDataFromApi() {
     $.ajax({
-        url: "https://wt.ops.labs.vu.nl/api20/2b9115a4",
+        url: "http://localhost:8080/api/phones",
         context: document.body,
         method: "GET",
         success: function(result) {
