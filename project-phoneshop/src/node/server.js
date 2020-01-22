@@ -3,13 +3,14 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var swaggerJSDoc = require("swagger-jsdoc");
 var app = express();
-const sqlite3 = require("sqlite3").verbose();
+const sqlite = require("sqlite3").verbose();
+let database = my_database('./phones.db');
 
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
             title: "Customer API",
-            description: "Customer API Information",
+            description: "This is the required documentation for our node API assignment-3",
             contact: {
                 name: "Amazing Developer"
             },
@@ -30,25 +31,9 @@ app.get("/swagger.json", function(req, response) {
     response.send(swaggerSpec);
 });
 
-let database = new sqlite3.Database(":memory:", err => {
-    if (err) {
-        return console.error(err.message);
-    }
-    console.log("Connected to the phones SQlite database.");
-});
-
-database.serialize(function() {
-    database.run("CREATE TABLE phones (image TEXT, brand TEXT, model TEXT, os TEXT, screensize INTEGER)");
-    image1 = "https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png"
-    image2 = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/8e/Samsung_Galaxy_S8_and_S8_Plus.png/569px-Samsung_Galaxy_S8_and_S8_Plus.png"
-
-    // seed data into the database
-    database.run(`INSERT INTO phones(image, brand, model, os, screensize ) VALUES(?,?,?,?,?)`, [image1 , "Iphone", "iPhone X", "Ios", 5]);
-    database.run(`INSERT INTO phones(image, brand, model, os, screensize ) VALUES(?,?,?,?,?)`, [image2, "Samsung" ,"Galaxy s8", "Android", 9]);
-});
-
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }));
+
 // parse application/json
 app.use(bodyParser.json());
 
@@ -89,30 +74,61 @@ app.get("/api/phones", function(req, response) {
 
 /**
  * @swagger
- * /api/phones/{id}:
+ * /api/reset:
  *   get:
  *     tags:
  *       - phones
- *     description: Returns a single phone
+ *     description: Reset database to origin state
+ *     produces:
+ *       - application/json
+ *     responses:
+ *       200:
+ *         description: Database resetted to origin state
+ *       400:
+ *         description: Bad request
+ */
+app.get("/api/reset", function(req, response) {
+    var query = "DELETE FROM [phones] where NOT id=1 " ;
+    database.run(
+        query,
+        function(err) {
+            if (err) {
+                response.body(err.message)
+                response.sendStatus(400);
+            } else {
+                response.sendStatus(200);
+            }
+        }
+    );
+});
+
+/**
+ * @swagger
+ * /api/phoneByID:
+ *   get:
+ *     tags:
+ *       - phones
+ *     description: Get phone by id
  *     produces:
  *       - application/json
  *     parameters:
  *       - name: id
- *         description: phone id
- *         in: path
- *         required: true
- *         type: integer
+ *         in: query
+ *         required: false
+ *         type: number
+ *         format: int
+ *         example: 5
  *     responses:
  *       200:
- *         description: A single phone
- *         schema:
- *           $ref: '#/definitions/phone'
+ *         description: Succesfully retrieved phone
+ *       404:
+ *         description: Phone with given id does not exists
  */
-app.get("/api/singlePhone", function(req, response) {
-    console.log("dddd");
-    response.writeHead(200, { "Content-Type": "text/html" });
-    response.write("random numbers that should come in the form of json");
-    response.end();
+app.get("/api/phoneByID", function(req, response) {
+    database.get("SELECT * FROM phones where id = '" + req.query.id + "' ", function(err, rows) {
+        if(rows == undefined) response.sendStatus(404)
+        response.json(rows);
+    });
 });
 
 //POST API
@@ -126,15 +142,18 @@ app.get("/api/singlePhone", function(req, response) {
  *     produces:
  *       - application/json
  *     parameters:
- *       - name: phone
- *         description: phone object
+ *       - name: create phone
  *         in: body
- *         required: true
- *         schema:
- *           $ref: '#/definitions/phone'
+ *         description: Phone post data.
+ *         required: false
+ *         type: number
+ *         format: int
+ *         example: {image : https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg, brand : Fairfone, model : FP3, os : Android, screensize : 5 }
  *     responses:
  *       200:
- *         description: Successfully created
+ *         description: Phone successfully created
+ *       404:
+ *         description: Phone with given id does not exists
  */
 app.post("/api/phones", function(req, response) {
     data = req.body;
@@ -143,7 +162,8 @@ app.post("/api/phones", function(req, response) {
         [data.image, data.brand, data.model, data.os, data.screensize],
         function(err) {
             if (err) {
-                return console.log(err.message);
+                response.body(err.message)
+                response.sendStatus(400);
             } else {
                 response.sendStatus(200);
             }
@@ -154,37 +174,36 @@ app.post("/api/phones", function(req, response) {
 //PUT API
 /**
  * @swagger
- * /api/phones/{id}:
+ * /api/phoneByID:
  *   put:
  *     tags:
  *       - phones
  *     description: Updates a single phone
  *     produces: application/json
  *     parameters:
- *       name: phone
- *       in: body
- *       description: Fields for the phone resource
- *       schema:
- *         type: array
- *         $ref: '#/definitions/phone'
+ *       - name: updates phone
+ *         in: body
+ *         description: Phone post data.
+ *         required: false
+ *         type: number
+ *         format: int
+ *         example: {id : 1, image : https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg, brand : Fairfone, model : FP3, os : Android, screensize : 5 }
  *     responses:
  *       200:
  *         description: Successfully updated
+*       404:
+ *         description: Phone with given id does not exists
  */
-app.put("/api/phones/:id", function(req, response) {
-    var query = "UPDATE [phones] SET" + 
-    "  image=" + req.body.image + 
-    ", brand=" + req.body.brand + 
-    ", model=" + req.body.model + 
-    ", os=" + req.body.os + 
-    ", screensize=" + req.body.screensize + 
-    "  WHERE Id=" + req.params.id;
-
+app.put("/api/phoneByID", function(req, response) {
+    var query = "UPDATE [phones] SET image=?, brand=?, model=?, os=?, screensize=? WHERE Id=?"
+    values = [req.body.image, req.body.brand, req.body.model, req.body.os, req.body.screensize, req.body.id]
     database.run(
       query,
+      values,
       function(err) {
           if (err) {
-              return console.log(err.message);
+            response.body(err.message)
+            response.sendStatus(400);
           } else {
               response.sendStatus(200);
           }
@@ -195,7 +214,7 @@ app.put("/api/phones/:id", function(req, response) {
 // DELETE API
 /**
  * @swagger
- * /api/phones/{id}:
+ * /api/phoneByID:
  *   delete:
  *     tags:
  *       - phones
@@ -204,15 +223,59 @@ app.put("/api/phones/:id", function(req, response) {
  *       - application/json
  *     parameters:
  *       - name: id
- *         description: phone id
- *         in: path
+ *         description: id
+ *         in: query
  *         required: true
  *         type: integer
  *     responses:
  *       200:
  *         description: Successfully deleted
  */
-app.delete("/api/phones /:id", function(req, response) {
-    var query = "DELETE FROM [phones] WHERE Id=" + req.params.id;
-    executeQuery(response, query);
+app.delete("/api/phoneByID", function(req, response) {
+    var query = "DELETE FROM [phones] WHERE Id=" + req.query.id;
+
+    database.run(
+        query,
+        function(err) {
+            if (err) {
+                response.body(err.message)
+                response.sendStatus(400);
+            } else {
+                response.sendStatus(200);
+            }
+        }
+    );
 });
+
+
+function my_database(filename) {
+	// Conncect to db by opening filename, create filename if it does not exist:
+	var db = new sqlite.Database(filename, (err) => {
+  		if (err) {
+			console.error(err.message);
+  		}
+  		console.log('Connected to the phones database.');
+	});
+	// Create our phones table if it does not exist already:
+	db.serialize(() => {
+		db.run(`
+        	CREATE TABLE IF NOT EXISTS phones
+        	(id 	INTEGER PRIMARY KEY,
+        	brand	CHAR(100) NOT NULL,
+        	model 	CHAR(100) NOT NULL,
+        	os 	    CHAR(10) NOT NULL,
+        	image 	CHAR(254) NOT NULL,
+        	screensize INTEGER NOT NULL
+        	)`);
+		db.all(`select count(*) as count from phones`, function(err, result) {
+			if (result[0].count == 0) {
+				db.run(`INSERT INTO phones (brand, model, os, image, screensize) VALUES (?, ?, ?, ?, ?)`,
+				["Fairfone", "FP3", "Android", "https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg", "5.65"]);
+				console.log('Inserted dummy phone entry into empty database');
+			} else {
+				console.log("Database already contains", result[0].count, " item(s) at startup.");
+			}
+		});
+	});
+	return db;
+}

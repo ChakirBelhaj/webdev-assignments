@@ -5,11 +5,13 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Illegal phoneshop America</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="./css/screen.css" />
-        <link rel="stylesheet" media="print" href="./css/print.css">
+        <link rel="stylesheet" media="print" href="./css/print.css" />
         <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" />
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
     </head>
 
     <body>
@@ -35,11 +37,12 @@
                 </caption>
                 <thead>
                     <tr class="tableheader textWhite">
-                        <th id="test" name="test">Image</th>
-                        <th id="2">Brand</th>
-                        <th id="3">Model</th>
-                        <th id="4">Operation system</th>
-                        <th id="5">Screensize</th>
+                        <th>Image</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Operation system</th>
+                        <th>Screensize</th>
+                        <th>Options</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
@@ -53,44 +56,55 @@
                     </tr>
                 </tfoot>
             </table>
-            <button class="positiveButton hidden-print" type="submit">Add</button>
+            <div class="center">
+                <button class="btn btn-primary center" type="submit">Add</button>
+                <button class="btn btn-danger center" onclick="resetTableData()">Reset</button>
+            </div>
         </form>
         <br />
-        <button class="negativeButton hidden-print" onclick="resetTableData()">Reset</button>
 
-        <table class="hidden-print">
-            <caption class="fontSize20 hidden-print">
-                Employees
-            </caption>
-            <thead>
-                <tr class="tableheader">
-                    <th>Name</th>
-                    <th>Nickname</th>
-                    <th>Phonenumber</th>
-                    <th>Living state</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Chakir</td>
-                    <td>The prospect</td>
-                    <td>NAN</td>
-                    <td>Unknown</td>
-                </tr>
-                <tr>
-                    <td>Ahmed</td>
-                    <td>Mystery</td>
-                    <td>202-555-0191,</td>
-                    <td>Washington</td>
-                </tr>
-                <tr>
-                    <td>Federico</td>
-                    <td>Corleone</td>
-                    <td>202-551-0192,</td>
-                    <td>New york</td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="modal fade" id="phoneUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="modalForm">
+                            <input required hidden id="phoneId" name="phoneId" />
+
+                            <div class="form-group">
+                                <label class="col-form-label">Image:</label>
+                                <input required id="image" class="form-control" type="url" name="image" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Brand:</label>
+                                <input required id="brand" class="form-control" type="text" name="brand" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Model:</label>
+                                <input required id="model" class="form-control" type="text" name="model" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Operation system:</label>
+                                <input required id="os" class="form-control" type="text" name="os" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Screensize:</label>
+                                <input required id="screensize" class="form-control" type="number" name="screensize" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="$('#modalForm').submit()" id="saveChangesPhone" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
         <footer class="footer hidden-print">
             <p>Created by: Chakir Belhaj & Ahmed Moussa</p>
             <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com"> chakir.belhaj@outlook.com</a>.</p>
