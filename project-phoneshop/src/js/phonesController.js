@@ -89,7 +89,7 @@ function createPhone() {
         method: "POST",
         success: function(response) {
             refreshTable();
-            alert(data.brand + " successfully added");
+            alert("Phone successfully added");
         },
         error: function(error) {
             alert(error.responseText);
