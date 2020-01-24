@@ -14,7 +14,7 @@ const swaggerOptions = {
             contact: {
                 name: "Amazing Developer"
             },
-            servers: ["http://localhost:5000"]
+            servers: ["http://localhost:8080"]
         }
     },
     apis: ["server.js"]
@@ -37,7 +37,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // parse application/json
 app.use(bodyParser.json());
 
-// // //CORS Middleware
+//CORS Middleware
 app.use(function(req, response, next) {
     //Enabling CORS
     response.header("Access-Control-Allow-Origin", "*");
@@ -65,6 +65,8 @@ var server = app.listen(process.env.PORT || 8080, function() {
  *     responses:
  *       200:
  *         description: An array of phones
+ *       400:
+ *         description: Bad request
  */
 app.get("/api/phones", function(req, response) {
     database.all("SELECT * FROM phones", function(err, rows) {
@@ -104,7 +106,7 @@ app.get("/api/reset", function(req, response) {
 
 /**
  * @swagger
- * /api/phoneByID:
+ * /api/phones/{id}:
  *   get:
  *     tags:
  *       - phones
@@ -113,7 +115,7 @@ app.get("/api/reset", function(req, response) {
  *       - application/json
  *     parameters:
  *       - name: id
- *         in: query
+ *         in: path
  *         required: false
  *         type: number
  *         format: int
@@ -124,14 +126,13 @@ app.get("/api/reset", function(req, response) {
  *       404:
  *         description: Phone with given id does not exists
  */
-app.get("/api/phoneByID", function(req, response) {
-    database.get("SELECT * FROM phones where id = '" + req.query.id + "' ", function(err, rows) {
+app.get("/api/phones/:id", function(req, response) {
+    database.get("SELECT * FROM phones where id = '" + req.params.id + "' ", function(err, rows) {
         if(rows == undefined) response.sendStatus(404)
         response.json(rows);
     });
 });
 
-//POST API
 /**
  * @swagger
  * /api/phones:
@@ -171,10 +172,9 @@ app.post("/api/phones", function(req, response) {
     );
 });
 
-//PUT API
 /**
  * @swagger
- * /api/phoneByID:
+ * /api/phones/{id}:
  *   put:
  *     tags:
  *       - phones
@@ -182,7 +182,7 @@ app.post("/api/phones", function(req, response) {
  *     produces: application/json
  *     parameters:
  *       - name: updates phone
- *         in: body
+ *         in: path
  *         description: Phone post data.
  *         required: false
  *         type: number
@@ -191,12 +191,12 @@ app.post("/api/phones", function(req, response) {
  *     responses:
  *       200:
  *         description: Successfully updated
-*       404:
+ *       404:
  *         description: Phone with given id does not exists
  */
-app.put("/api/phoneByID", function(req, response) {
+app.put("/api/phones/:id", function(req, response) {
     var query = "UPDATE [phones] SET image=?, brand=?, model=?, os=?, screensize=? WHERE Id=?"
-    values = [req.body.image, req.body.brand, req.body.model, req.body.os, req.body.screensize, req.body.id]
+    values = [req.body.image, req.body.brand, req.body.model, req.body.os, req.body.screensize, req.params.id]
     database.run(
       query,
       values,
@@ -211,10 +211,9 @@ app.put("/api/phoneByID", function(req, response) {
   );
 });
 
-// DELETE API
 /**
  * @swagger
- * /api/phoneByID:
+ * /api/phones/{id}:
  *   delete:
  *     tags:
  *       - phones
@@ -224,15 +223,17 @@ app.put("/api/phoneByID", function(req, response) {
  *     parameters:
  *       - name: id
  *         description: id
- *         in: query
+ *         in: path
  *         required: true
  *         type: integer
  *     responses:
  *       200:
  *         description: Successfully deleted
+ *       404:
+ *         description: Phone with given id does not exists
  */
-app.delete("/api/phoneByID", function(req, response) {
-    var query = "DELETE FROM [phones] WHERE Id=" + req.query.id;
+app.delete("/api/phones/:id", function(req, response) {
+    var query = "DELETE FROM [phones] WHERE Id=" + req.params.id;
 
     database.run(
         query,

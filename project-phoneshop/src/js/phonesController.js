@@ -99,9 +99,8 @@ function createPhone() {
 
 // get request to acquire specific phone information by id
 function getPhoneById(id) {
-    console.log(id);
     $.ajax({
-        url: "http://localhost:8080/api/phoneById?id=" + id,
+        url: "http://localhost:8080/api/phones/" + id,
         context: document.body,
         method: "GET",
         success: function(response) {
@@ -123,7 +122,7 @@ function fillModal(data) {
 //add new tablerow with given data
 function updatePhoneById(id) {
     $.ajax({
-        url: "http://localhost:8080/api/phoneById",
+        url: "http://localhost:8080/api/phones/" + id,
         data: {
             id: id,
             image: $("#image").val(),
@@ -147,7 +146,7 @@ function updatePhoneById(id) {
 // delete specific phone by id
 function deletePhoneById(id){
     $.ajax({
-        url: "http://localhost:8080/api/phoneById?id=" + id,
+        url: "http://localhost:8080/api/phones/" + id,
         method: "DELETE",
         success: function(response) {
             refreshTable();
