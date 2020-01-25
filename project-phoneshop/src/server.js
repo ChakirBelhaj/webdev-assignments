@@ -1,11 +1,14 @@
-//Initiallising node modules
+//Initiallising npm packages
 var express = require("express");
 var bodyParser = require("body-parser");
 var swaggerJSDoc = require("swagger-jsdoc");
 var app = express();
+
+//initialising sql
 const sqlite = require("sqlite3").verbose();
 let database = my_database('./phones.db');
 
+//configuration for our swagger plug-in
 const swaggerOptions = {
     swaggerDefinition: {
         info: {
@@ -39,7 +42,7 @@ app.use(bodyParser.json());
 
 //CORS Middleware
 app.use(function(req, response, next) {
-    //Enabling CORS
+    //Enabling CORS policy for cross sight requests
     response.header("Access-Control-Allow-Origin", "*");
     response.header("Access-Control-Allow-Methods", "*");
     response.header("Access-Control-Allow-Headers", "*");
@@ -197,6 +200,17 @@ app.post("/api/phones", function(req, response) {
  *     responses:
  *       200:
  *         description: Successfully updated
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               description: The user ID.
+ *             username:
+ *               type: string
+ *               description: The user name.
+ *             -name: test
+ *             example: {image : https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg, brand : Fairfone, model : FP3, os : Android, screensize : 5 }
  *       404:
  *         description: Phone with given id does not exists
  */
