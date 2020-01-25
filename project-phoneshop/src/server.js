@@ -67,7 +67,36 @@ var server = app.listen(process.env.PORT || 8080, function() {
  *       - application/json
  *     responses:
  *       200:
- *         description: An array of phones
+ *         description: Array of phones
+ *         schema:
+ *           type: array
+ *           items:
+ *             type: object
+ *             properties:
+ *               id:
+ *                 type: integer
+ *                 description: The user ID.
+ *                 example: 1
+ *               image:
+ *                 type: string
+ *                 description: The user name.
+ *                 example: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg
+ *               brand:
+ *                 type: string
+ *                 description: The user name.
+ *                 example: Fairfone
+ *               model:
+ *                 type: integer
+ *                 description: The user ID.
+ *                 example: FP3
+ *               os:
+ *                 type: string
+ *                 description: The user name.
+ *                 example: Android
+ *               screensize:
+ *                 type: int
+ *                 description: The user name.
+ *                 example: 5
  *       400:
  *         description: Bad request
  */
@@ -93,7 +122,7 @@ app.get("/api/phones", function(req, response) {
  *         description: Bad request
  */
 app.get("/api/reset", function(req, response) {
-    var query = "DELETE FROM [phones] where NOT id=1 " ;
+    var query = "DELETE FROM [phones]" ;
     database.run(
         query,
         function(err) {
@@ -101,7 +130,7 @@ app.get("/api/reset", function(req, response) {
                 response.body(err.message)
                 response.sendStatus(400);
             } else {
-                response.sendStatus(200);
+               response.sendStatus(200);
             }
         }
     );
@@ -125,7 +154,34 @@ app.get("/api/reset", function(req, response) {
  *         example: 5
  *     responses:
  *       200:
- *         description: Succesfully retrieved phone
+ *         description: Successfully updated
+ *         schema:
+ *           type: object
+ *           properties:
+ *             id:
+ *               type: integer
+ *               description: The user ID.
+ *               example: 1
+ *             image:
+ *               type: string
+ *               description: The user name.
+ *               example: https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg
+ *             brand:
+ *               type: string
+ *               description: The user name.
+ *               example: Fairfone
+ *             model:
+ *               type: integer
+ *               description: The user ID.
+ *               example: FP3
+ *             os:
+ *               type: string
+ *               description: The user name.
+ *               example: Android
+ *             screensize:
+ *               type: int
+ *               description: The user name.
+ *               example: 5
  *       404:
  *         description: Phone with given id does not exists
  */
@@ -200,17 +256,6 @@ app.post("/api/phones", function(req, response) {
  *     responses:
  *       200:
  *         description: Successfully updated
- *         schema:
- *           type: object
- *           properties:
- *             id:
- *               type: integer
- *               description: The user ID.
- *             username:
- *               type: string
- *               description: The user name.
- *             -name: test
- *             example: {image : https://upload.wikimedia.org/wikipedia/commons/thumb/c/c4/Fairphone_3_modules_on_display.jpg/320px-Fairphone_3_modules_on_display.jpg, brand : Fairfone, model : FP3, os : Android, screensize : 5 }
  *       404:
  *         description: Phone with given id does not exists
  */

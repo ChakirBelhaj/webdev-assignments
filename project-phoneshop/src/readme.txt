@@ -9,4 +9,3 @@ The API documentation can be found at http://localhost:8080/api-docs
 
 -note
 this submission works with our assignment 2 submission. run the server and open index.html for a demo.
-test
