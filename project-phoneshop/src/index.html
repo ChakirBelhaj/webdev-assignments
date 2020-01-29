@@ -1,112 +1,120 @@
 <!DOCTYPE html>
+
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Illegal phoneshop America</title>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="./css/screen.css" />
+        <link rel="stylesheet" media="print" href="./css/print.css" />
+        <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    </head>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Illegal shop</title>
-    <link rel="stylesheet" type="text/css" href="./css/styles.css" />
-    <link rel="stylesheet" media="print" href="./css/printStyles.css">
-</head>
+    <body>
+        <nav class="hidden-print">
+            <ul class="navBar">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="contact.html">Contact</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+        </nav>
+        <section>
+            <h1 class="title textWhite"><abbr title="World Health Organization">Illegal</abbr> phoneshop America</h1>
+            <h2 class="textWhite">Keep it quiet</h2>
+            <p class="fontSize20 center textWhite">
+                We are a World Wide criminal organization for illegal phone selling.
+            </p>
+        </section>
 
-<body>
-    <nav class="hidden-print">
-        <ul class="navBar">
-            <li><a href="index.html">Home</a></li>
-            <li><a href="contact.html">Contact</a></li>
-            <li><a href="about.html">About</a></li>
-        </ul>
-    </nav>
+        <form id="phonesForm" class="overflowAuto">
+            <table id="phonesTable" class="overflowAuto">
+                <caption class="textWhite">
+                    Stolen phones
+                </caption>
+                <thead>
+                    <tr class="tableheader textWhite">
+                        <th>Image</th>
+                        <th>Brand</th>
+                        <th>Model</th>
+                        <th>Operation system</th>
+                        <th>Screensize</th>
+                        <th>Options</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+                <tfoot>
+                    <tr class="hidden-print">
+                        <td><input required type="url" name="image" /></td>
+                        <td><input required type="text" name="brand" /></td>
+                        <td><input required type="text" name="model" /></td>
+                        <td><input required type="text" name="os" /></td>
+                        <td><input required type="number" name="screensize" /></td>
+                        <td></td>
+                    </tr>
+                </tfoot>
+            </table>
+            <div class="center">
+                <button class="btn btn-primary center" type="submit">Add</button>
+                <button type="button" class="btn btn-danger center" onclick="resetTableData()">Reset</button>
+            </div>
+        </form>
+        <br />
 
-    <section>
-        <h1 class="title"><abbr title="World Health Organization">Illegal</abbr> phoneshop America</h1>
-        <h2>Keep it quiet</h2>
-        <p class="fontSize20 center">
-            We are a World Wide criminal organization for illegal phone selling.
-        </p>
-    </section>
+        <div class="modal fade" id="phoneUpdateModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">New message</h5>
+                        <button type="button" id="closeModal" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form id="modalForm">
+                            <input required hidden id="phoneId" name="phoneId" />
 
-    <form class="overflowAuto">
-        <table>
-            <caption>Stolen phones</caption>
-            <thead>
-                <tr class="tableheader">
-                    <th>Image</th>
-                    <th>Brand</th>
-                    <th>Model</th>
-                    <th>Operation system</th>
-                    <th>Screensize</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><img class="imageInTable"
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png"
-                            alt="phone"></td>
-                    <td>Iphone x</td>
-                    <td>s</td>
-                    <td>50</td>
-                    <td>50</td>
-                </tr>
-                <tr>
-                    <td><img class="imageInTable"
-                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/32/IPhone_X_vector.svg/440px-IPhone_X_vector.svg.png"
-                            alt="phone"></td>
-                    <td>Iphone x</td>
-                    <td>s</td>
-                    <td>50</td>
-                    <td>50</td>
-                </tr>
-                <tr class="hidden-print">
-                    <td><input required type="text" name="brand"></td>
-                    <td><input required type="text" name="model"></td>
-                    <td><input required type="text" name="os"></td>
-                    <td><input required type="text" name="image"></td>
-                    <td><input required type="number" name="screensize"></td>
-                </tr>
-            </tbody>
-        </table>
-        <button class="positiveButton hidden-print" type="submit">Add</button>
-    </form>
-
-    <table class="hidden-print">
-        <caption class="fontSize20 hidden-print">Employees</caption>
-        <thead>
-            <tr class="tableheader">
-                <th>Name</th>
-                <th>Nickname</th>
-                <th>Phonenumber</th>
-                <th>Living state</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td>Chakir</td>
-                <td>The prospect</td>
-                <td>NAN</td>
-                <td>Unknown</td>
-            </tr>
-            <tr>
-                <td>Ahmed</td>
-                <td>Mystery</td>
-                <td>202-555-0191,</td>
-                <td>Washington</td>
-            </tr>
-            <tr>
-                <td>Federico</td>
-                <td>Corleone</td>
-                <td>202-551-0192,</td>
-                <td>New york</td>
-            </tr>
-        </tbody>
-    </table>
-    <footer class="footer hidden-print">
-        <p>Created by: Chakir Belhaj & Ahmed Moussa</p>
-        <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com">
-                chakir.belhaj@outlook.com</a>.</p>
-    </footer>
-</body>
-
-
-
+                            <div class="form-group">
+                                <label class="col-form-label">Image:</label>
+                                <input required id="image" class="form-control" type="url" name="image" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Brand:</label>
+                                <input required id="brand" class="form-control" type="text" name="brand" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Model:</label>
+                                <input required id="model" class="form-control" type="text" name="model" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Operation system:</label>
+                                <input required id="os" class="form-control" type="text" name="os" />
+                            </div>
+                            <div class="form-group">
+                                <label class="col-form-label">Screensize:</label>
+                                <input required id="screensize" class="form-control" type="number" name="screensize" />
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="button" onclick="$('#modalForm').submit()" id="saveChangesPhone" class="btn btn-primary">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="footer hidden-print">
+            <p>Created by: Chakir Belhaj & Ahmed Moussa</p>
+            <p>Contact information: <a href="mailto:chakir.belhaj@outlook.com"> chakir.belhaj@outlook.com</a>.</p>
+        </footer>
+    </body>
 </html>
+
+<!-- configuration for our datatables plugin, more info : https://datatables.net/-->
+<script src="js/dataTableConfiguration.js"></script>
+
+<!-- controller for sending and receiving data from our api-->
+<script src="./js/phonesController.js"></script>
